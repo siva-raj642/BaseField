@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Form</title>
+</head>
+<body>
+
+<form id="myForm" method="POST">
+  <label>Name</label><br>
+  <input id="name" type="text" style="width:100%; padding:5px;">
+  <small id="nameErr" style="color:red;"></small>
+  <br><br>
+
+  <label>Email</label><br>
+  <input id="email" type="text" style="width:100%; padding:5px;">
+  <small id="emailErr" style="color:red;"></small>
+  <br><br>
+
+  <label>Password</label><br>
+  <input id="password" type="password" style="width:100%; padding:5px;">
+  <small id="passErr" style="color:red;"></small>
+  <br><br>
+
+  <label>Confirm Password</label><br>
+  <input id="cpassword" type="password" style="width:100%; padding:5px;">
+  <small id="cpassErr" style="color:red;"></small>
+  <br><br>
+
+  <button type="submit" style="padding:6px 12px;">Submit</button>
+
+</form>
+
+<script>
+    document.getElementById("myForm").addEventListener("submit", function(e){
+
+    e.preventDefault();   
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    let cpass = document.getElementById("cpassword").value.trim();
+
+    let isValid = true;
+
+    
+    document.getElementById("nameErr").innerText = "";
+    document.getElementById("emailErr").innerText = "";
+    document.getElementById("passErr").innerText = "";
+    document.getElementById("cpassErr").innerText = "";
+
+    
+    if(name === ""){
+        document.getElementById("nameErr").innerText = "Name cannot be empty";
+        isValid = false;
+    }
+
+    if(email === ""){
+        document.getElementById("emailErr").innerText = "Email cannot be empty";
+        isValid = false;
+    }
+
+    if(pass === ""){
+        document.getElementById("passErr").innerText = "Password cannot be empty";
+        isValid = false;
+    }
+
+    
+    if(name.length < 3){
+        document.getElementById("nameErr").innerText = "Name must be at least 3 characters";
+        isValid = false;
+    }
+
+    if(pass.length < 6){
+        document.getElementById("passErr").innerText = "Password must be at least 6 characters";
+        isValid = false;
+    }
+
+    
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(email !== "" && !pattern.test(email)){
+        document.getElementById("emailErr").innerText = "Email is not valid";
+        isValid = false;
+    }
+
+    if(pass != cpass){
+        document.getElementById("cpassErr").innerText="Password must match";
+    }
+
+    if(isValid){
+        alert("Form Submitted Successfully ");
+        this.submit();
+    }
+
+});
+</script>
+</body>
+</html>
