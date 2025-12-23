@@ -19,6 +19,7 @@
   <label>Password</label><br>
   <input id="password" type="password" style="width:100%; padding:5px;">
   <small id="passErr" style="color:red;"></small>
+  <div id="invalid"></div>
   <br><br>
 
   <label>Confirm Password</label><br>
@@ -41,6 +42,7 @@
     let cpass = document.getElementById("cpassword").value.trim();
 
     let isValid = true;
+    
 
     
     document.getElementById("nameErr").innerText = "";
@@ -69,11 +71,19 @@
         document.getElementById("nameErr").innerText = "Name must be at least 3 characters";
         isValid = false;
     }
+    function containsUppercase(str) {
+        return /[A-Z]/.test(str);
+    }
+    function hasNumber(myString) {
+        return /\d/.test(myString);
+    }
 
-    if(pass.length < 6){
-        document.getElementById("passErr").innerText = "Password must be at least 6 characters";
+
+    if(pass.length < 9 || !containsUppercase(pass) || !hasNumber(pass) ){
+        document.getElementById("passErr").innerText = "Password is in invalid format";
         isValid = false;
     }
+    document.getElementById("invalid").innerText="The Password must contain atleast one Capital letter , one Number and it must be above 8 character "
 
     
     let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -84,11 +94,26 @@
 
     if(pass != cpass){
         document.getElementById("cpassErr").innerText="Password must match";
+        isValid = false;
     }
 
     if(isValid){
         alert("Form Submitted Successfully ");
-        this.submit();
+        const data ={name,email,pass,cpass};
+        const res = fetch("http://localhost:3000/submit",{
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body:JSON.stringify(data)
+        })  .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                alert(result.message);
+        })
+            .catch(err => {
+                console.error("Request failed", err);
+        });
     }
 
 });
